@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            text-shadow: 1px 1px 2px black, 0 0 1em red; /* Параметры тени */
+            background: #c7b39b url("http://it-school.nsu.ru/theme/NSU/images/team-4.jpg"); /* Цвет фона и путь к файлу */
+            color: #FF0000; /* Цвет текста */
+            }
+    </style>
+  {% block title %}<title>Local Library</title>{% endblock %}
+</head>
+
+<body>
+  {% block sidebar %}<!-- insert default navigation text for every page -->{% endblock %}
+  {% block content %}<!-- default content text (typically empty) -->{% endblock %}
+</body>
+</html>
