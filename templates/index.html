@@ -2,17 +2,26 @@
 
 {% block content %}
 
-<table>
+    <table>
 
-<tr>
-    <td><p>ааааааааааааааааааааааааа</p></td>
-  <td><p>здарова</p></td>
-</tr>
+        <tr>
+            <td><p>ааааааааааааааааааааааааа</p></td>
+            <td><p>здарова</p></td>
+        </tr>
 
-<tr>
-  <td><p>нука</p></td>
-  <td><a href="{% url 'login' %}">логинься</a></td>
-</tr>
-</table>
+
+        {% if user.is_authenticated %}
+            <tr>
+                <td><p>ты залогинен</p></td>
+                <td><a href="{% url 'logout' %}">можешь выйти</a></td>
+            </tr>  {% else %}
+            <tr>
+                <td><p>нука</p></td>
+                <td><a href="{% url 'login' %}">логинься</a></td>
+            </tr>
+        {% endif %}
+
+
+    </table>
 
 {% endblock %}
