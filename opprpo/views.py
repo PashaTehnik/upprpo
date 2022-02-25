@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 from .forms import RegistrForm
-
+from django.contrib.auth.models import User
 
 # Функция регистрации
 def register(request):
@@ -22,6 +22,10 @@ def register(request):
             data['res'] = "Всё прошло успешно"
             # Рендаринг страницы
             return registration_complete(request)
+        if form.data['password1'] != form.data['password2']:
+            return diff_passwords(request)
+        if User.objects.filter(username=form.data['username']).exists():
+            return name_exist(request)
         return HttpResponse("Ooooops.. Попробуй еще раз, возможно это имя пользователя занято.")
     else:  # Иначе
         # Создаём форму
@@ -41,6 +45,20 @@ def index(request):
 
 def registration_complete(request):
     template = loader.get_template('registration/registration_complete.html')
+    context = {}
+    rendered_page = template.render(context, request)
+    return HttpResponse(rendered_page)
+
+
+def diff_passwords(request):
+    template = loader.get_template('registration/diff_passwords.html')
+    context = {}
+    rendered_page = template.render(context, request)
+    return HttpResponse(rendered_page)
+
+
+def name_exist(request):
+    template = loader.get_template('registration/name_exist.html')
     context = {}
     rendered_page = template.render(context, request)
     return HttpResponse(rendered_page)
