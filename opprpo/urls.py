@@ -25,4 +25,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('index', views.index, name='index'),
     path('register', views.register, name='register'),
+    path('library/', include('library.urls'))
 ]

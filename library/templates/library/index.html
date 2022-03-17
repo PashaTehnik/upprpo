@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base_generic.html" %}
 
-</body>
-</html>
+{% block content %}
+
+    <table>
+
+        <tr>
+            <td><p>здарова, кароч тут типа должны быть все доступные тебе games</p></td>
+        </tr>
+
+        {% if not user.is_authenticated %}
+            <tr>
+                <td><p>залогинься</p></td>
+                <td><a href="{% url 'login' %}">логинься</a></td>
+            </tr>  {% else %}
+            <tr>
+                <table>
+                    <tr>
+                          <td>
+                              <img src="https://sun9-44.userapi.com/impg/nMIXcZcOA13dZC0F5VF0IoPhaNQ8sHy28yAtug/Gvvjf_q99FM.jpg?size=258x232&quality=96&sign=8c9fb0b9b7998f3bf1ee292290934741&type=album" alt="game1">
+                              <br> game1
+                          </td>
+                          <td>
+                              <img src="https://sun9-1.userapi.com/impg/gpe3iFkQN8tz2m0sRNEak8v7C32Ted4D_WT9UA/CVauWcd-DfQ.jpg?size=432x278&quality=96&sign=4e24cbc67d397ab002f12207cda04c13&type=album" alt="game2">
+                              <br> game2
+                          </td>
+                          <td>
+                              <img src="https://sun9-74.userapi.com/impg/tetGHzl32IIzUA8Q47nDqNm2J9uQUN5HT8aDCw/4z5chlMESDs.jpg?size=543x301&quality=96&sign=46fefb4fbb31756f37e8aeac2e4bab52&type=album" alt="game3">
+                              <br> game3
+                          </td>
+                    </tr>
+                </table>
+            </tr>
+        {% endif %}
+
+
+    </table>
+
+{% endblock %}
