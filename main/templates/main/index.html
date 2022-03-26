@@ -145,5 +145,12 @@
       new bootstrap.Popover(el, opts);
     })
 </script>
+
+  {% if user.is_authenticated %}
+    <p>you are logged in under this name: {{ user.username }}.</p>
+    <p>you can <a href="logout">logout</a>.</p>
+  {% else %}
+    <p>you're not logged in. <br>if you want to get access to all the resources, please <a href="login">log in</a> or you can play free <a href="games">games</a></p>
+  {% endif %}
   </body>
 </html>
