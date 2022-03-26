@@ -1,0 +1,17 @@
+li a {
+    color: deeppink;
+}
+
+h1 {
+    color: blue;
+    font-size: 250%;
+}
+
+p    {
+    color: deeppink;
+}
+
+body {
+    /*background: black url("images/background.gif");*/
+    background-color: black;
+}
