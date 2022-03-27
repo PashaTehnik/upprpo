@@ -9,8 +9,9 @@ from .forms import LoginForm, RegisterForm
 
 
 def user_login(request):
-    print(request.GET)
-    print(request.POST)
+    # print(request.GET)
+    # print(request.POST)
+    message = {'ans': ''}
     if request.method == 'POST':
         if request.POST['next'] == 'login':
             print(request.POST)
@@ -23,9 +24,11 @@ def user_login(request):
                         login(request, user)
                         return redirect('/')
                     else:
-                        return HttpResponse('Disabled account')
+                        #return HttpResponse('Disabled account')
+                        message['ans'] = 'Disabled account'
                 else:
-                    return HttpResponse('Invalid login')
+                    message['ans'] = 'Invalid login or password'
+                    # return HttpResponse('Invalid login')
 
         elif request.POST['next'] == 'logout':
             logout_(request)
@@ -38,27 +41,10 @@ def user_login(request):
             #     new_user.save()
             return redirect('/')
     else:
-        form = RegisterForm()
-    return render(request, 'main/login.html', {'form': form})
-
-
-def user_registr(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(username=cd['username'], password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return redirect('/')
-                else:
-                    return HttpResponse('Disabled account')
-            else:
-                return HttpResponse('Invalid login')
-    else:
-        form = LoginForm()
-    return render(request, 'main/login.html', {'form': form})
+        raise Exception('I dont know django! :`(')
+        # form = RegisterForm()
+    print(request, message)
+    return render(request, 'main/index.html', message)
 
 
 def index(request):
