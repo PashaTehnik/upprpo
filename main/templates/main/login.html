@@ -3,9 +3,16 @@
 <table>
 
 <tr>
+
+</tr>
+
+<tr>
   <td>{{ form.username.label_tag }}</td>
   <td>{{ form.username }}</td>
+  <td>{{ form.mail.label_tag }}</td>
+  <td>{{ form.mail }}</td>
 </tr>
+
 
 <tr>
   <td>{{ form.password.label_tag }}</td>
@@ -13,7 +20,10 @@
 </tr>
 </table>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
+<input type="submit" name="next" value="login" />
+<input type="submit" name="next" value="registr" />
+
+<!--<input type="hidden" name="next" value="{{ next }}" />-->
+
 
 </form>

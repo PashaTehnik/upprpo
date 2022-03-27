@@ -5,10 +5,39 @@ from django.views import generic
 from django.contrib import auth
 # Create your views here.
 from django.contrib.auth import authenticate, login, logout
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 
 def user_login(request):
+    if request.method == 'POST':
+        if request.POST['next'] == 'login':
+            print(request.POST)
+            form = RegisterForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                user = authenticate(username=cd['username'], password=cd['password'])
+                if user is not None:
+                    if user.is_active:
+                        login(request, user)
+                        return redirect('/')
+                    else:
+                        return HttpResponse('Disabled account')
+                else:
+                    return HttpResponse('Invalid login')
+
+        elif request.POST['next'] == 'registr':
+            # form = RegisterForm(request.POST)
+            # if form.is_valid():
+            #     new_user = form.save(commit=False)
+            #     new_user.set_password(form.cleaned_data['password'])
+            #     new_user.save()
+            return redirect('/')
+    else:
+        form = RegisterForm()
+    return render(request, 'main/login.html', {'form': form})
+
+
+def user_registr(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -28,10 +57,8 @@ def user_login(request):
 
 
 def index(request):
-    window = """<div class="okno">
-      Всплывающее окошко!
-    </div>"""
-    return render(request, 'main/index.html', {'window': window})
+    print(request.GET)
+    return render(request, 'main/index.html')
 
 
 def logout_(request):
