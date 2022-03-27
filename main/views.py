@@ -9,6 +9,8 @@ from .forms import LoginForm, RegisterForm
 
 
 def user_login(request):
+    print(request.GET)
+    print(request.POST)
     if request.method == 'POST':
         if request.POST['next'] == 'login':
             print(request.POST)
@@ -58,6 +60,7 @@ def user_registr(request):
 
 def index(request):
     print(request.GET)
+    print(request.POST)
     return render(request, 'main/index.html')
 
 
