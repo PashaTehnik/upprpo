@@ -27,6 +27,9 @@ def user_login(request):
                 else:
                     return HttpResponse('Invalid login')
 
+        elif request.POST['next'] == 'logout':
+            logout_(request)
+            return redirect('/')
         elif request.POST['next'] == 'registr':
             # form = RegisterForm(request.POST)
             # if form.is_valid():
