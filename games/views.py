@@ -31,4 +31,9 @@ class Games(generic.ListView):
         context = super(Games, self).get_context_data(**kwargs)
         message = {'ans': '', 'type': 'danger'}
         message['page'] = {'home': 'white', 'about': 'white', 'games': 'secondary', 'hz': 'white'}
-        return {**message, **context}
+        if self.request.user.is_authenticated:
+            res = {**message, **context}
+        else:
+            message['ans'], message['type'] = "please log in to access this page", 'warning'
+            res = message
+        return res
