@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views import generic
@@ -6,12 +6,15 @@ from django.contrib import auth
 # Create your views here.
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm
+from .models import About
 
 
 def user_login(request):
     # print(request.GET)
     # print(request.POST)
-    message = {'ans': ''}
+    message = {'ans': '', 'type': 'danger'}
+    message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+
     if request.method == 'POST':
         if request.POST['next'] == 'login':
             print(request.POST)
@@ -22,13 +25,13 @@ def user_login(request):
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        return redirect('/')
+                        message['ans'] = 'successfully logged in'
+                        message['type'] = 'success'
+                        #return redirect('/')
                     else:
-                        #return HttpResponse('Disabled account')
                         message['ans'] = 'Disabled account'
                 else:
                     message['ans'] = 'Invalid login or password'
-                    # return HttpResponse('Invalid login')
 
         elif request.POST['next'] == 'logout':
             logout_(request)
@@ -48,9 +51,18 @@ def user_login(request):
 
 
 def index(request):
+    message = {'ans': '', 'type': 'danger'}
+    message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
     print(request.GET)
     print(request.POST)
-    return render(request, 'main/index.html')
+    return render(request, 'main/index.html', message)
+
+
+def about(request):
+    message = {'ans': '', 'type': 'danger'}
+    message['page'] = {'home': 'white', 'about': 'secondary', 'games': 'white', 'hz': 'white'}
+    message['abouts'] = get_list_or_404(About)
+    return render(request, 'main/index.html', message)
 
 
 def logout_(request):
