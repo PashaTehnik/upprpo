@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 
+
 from upprpo import settings
 from .models import Chat, Message
 from django.urls import reverse
@@ -82,10 +83,18 @@ class MessagesView(generic.ListView):
 
 def createDialog(request):
     u_name = request.GET.get('u_name')
-    model = Chat()
-    model.save()
-    model.members.add(User.objects.get(username=u_name))
-    model.members.add(request.user)
-    model.type = 'dialog'
-    return redirect('/chat')
+    second_user = None
+    try:
+        second_user = User.objects.get(username=u_name)
+    finally:
+        if not second_user:
+            message = {'ans': 'This user doesn`t exist', 'type': 'danger', 'chats': Chat.objects.filter(members=request.user)}
+            message['page'] = {'home': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+            return render(request, 'chat/index.html', message)
+        model = Chat()
+        model.save()
+        model.members.add(second_user)
+        model.members.add(request.user)
+        model.type = 'dialog'
+        return redirect('/chat')
 
