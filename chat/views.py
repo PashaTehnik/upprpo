@@ -13,6 +13,16 @@ from .forms import MessageForm
 from django.contrib.auth.models import User
 
 
+def user_auth_check(request):
+    if not request.user.is_authenticated:
+        message = {}
+        message['ans'], message['type'] = "please log in to access this page", 'warning'
+        message['chat'] = ''
+        message['chats'] = ''
+        return render(request, 'chat/index.html', message)
+    return None
+
+
 class DialogsView(generic.ListView):
     # def get(self, request):
     #     print('user id = ', request.user.id)
@@ -23,6 +33,9 @@ class DialogsView(generic.ListView):
     context_object_name = 'chats'
 
     def get_queryset(self):
+        self.list_mem = None
+        if not self.request.user.is_authenticated:
+            return None
         self.list_mem = Chat.objects.filter(members=self.request.user)
         return self.list_mem
 
@@ -78,6 +91,10 @@ class MessagesView(generic.ListView):
         self.chat = Chat.objects.get(id=chat_id)
         self.messages = self.chat.message_set
         # print(self.messages.all()[0].text)
+        context = self.get_context_data_()
+        check = user_auth_check(request)
+        if check:
+            return check
         return render(request, 'chat/index.html', self.get_context_data_())
 
 

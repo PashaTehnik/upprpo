@@ -14,7 +14,7 @@ def user_login(request):
     # print(request.GET)
     # print(request.POST)
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+    message['page'] = {'home': 'secondary', 'chat': 'white', 'about': 'white', 'games': 'white', 'hz': 'white'}
 
     if request.method == 'POST':
         print(request.POST)
@@ -50,7 +50,7 @@ def user_login(request):
             elif User.objects.filter(username=username):
                 message['ans'] = 'user already exist'
                 message['type'] = 'danger'
-                print("suck dick")
+                print("user already exist")
 
             else:
                 user = User(username=username, email=email)
@@ -71,7 +71,7 @@ def user_login(request):
 
 def index(request):
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+    message['page'] = {'home': 'secondary', 'chat': 'white', 'about': 'white', 'games': 'white', 'hz': 'white'}
     print(request.GET)
     print(request.POST)
     return render(request, 'main/index.html', message)
@@ -79,7 +79,7 @@ def index(request):
 
 def about(request):
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'white', 'about': 'secondary', 'games': 'white', 'hz': 'white'}
+    message['page'] = {'home': 'white', 'chat': 'white', 'about': 'secondary', 'games': 'white', 'hz': 'white'}
     message['abouts'] = get_list_or_404(About)
     return render(request, 'main/index.html', message)
 
@@ -87,7 +87,3 @@ def about(request):
 def logout_(request):
     logout(request)
     return redirect('/')
-
-# def game(request, game_id):
-#     game = get_object_or_404(GameHtml5, pk=game_id)
-#     return render(request, 'games/index.html', {'game': game})

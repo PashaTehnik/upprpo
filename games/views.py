@@ -11,7 +11,7 @@ from django.http import Http404
 
 def game(request, game_id):
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'white', 'about': 'white', 'games': 'secondary', 'hz': 'white'}
+    message['page'] = {'home': 'white', 'chat': 'white', 'about': 'white', 'games': 'secondary', 'hz': 'white'}
     message['game'] = get_object_or_404(GameHtml5, pk=game_id)
     if not request.user.is_authenticated:
         message['ans'], message['type'] = "please log in to access this page", 'warning'
@@ -30,7 +30,7 @@ class Games(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(Games, self).get_context_data(**kwargs)
         message = {'ans': '', 'type': 'danger'}
-        message['page'] = {'home': 'white', 'about': 'white', 'games': 'secondary', 'hz': 'white'}
+        message['page'] = {'home': 'white', 'chat': 'white', 'about': 'white', 'games': 'secondary', 'hz': 'white'}
         if self.request.user.is_authenticated:
             res = {**message, **context}
         else:
