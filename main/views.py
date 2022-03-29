@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm
 from .models import About
+from django.contrib.auth.models import User
 
 
 def user_login(request):
@@ -16,9 +17,10 @@ def user_login(request):
     message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
 
     if request.method == 'POST':
+        print(request.POST)
         if request.POST['next'] == 'login':
             print(request.POST)
-            form = RegisterForm(request.POST)
+            form = LoginForm(request.POST)
             if form.is_valid():
                 cd = form.cleaned_data
                 user = authenticate(username=cd['username'], password=cd['password'])
@@ -27,7 +29,7 @@ def user_login(request):
                         login(request, user)
                         message['ans'] = 'successfully logged in'
                         message['type'] = 'success'
-                        #return redirect('/')
+                        # return redirect('/')
                     else:
                         message['ans'] = 'Disabled account'
                 else:
@@ -37,12 +39,29 @@ def user_login(request):
             logout_(request)
             return redirect('/')
         elif request.POST['next'] == 'registr':
-            # form = RegisterForm(request.POST)
-            # if form.is_valid():
-            #     new_user = form.save(commit=False)
-            #     new_user.set_password(form.cleaned_data['password'])
-            #     new_user.save()
-            return redirect('/')
+            print(request.POST)
+            print("registr")
+            username, email, passwd1, passwd2 = request.POST.get('username'), request.POST.get('email'), \
+                                                request.POST.get('password1'), request.POST.get('password2')
+            if passwd1 != passwd2:
+                message['ans'] = 'bad passwords'
+                message['type'] = 'danger'
+                print("bad passwd")
+            elif User.objects.get(username=username):
+                message['ans'] = 'user already exist'
+                message['type'] = 'danger'
+                print("bad passwd")
+
+            else:
+                user = User(username=username, email=email)
+                if user is not None:
+                    user.set_password(passwd1)
+                    user.save()
+                    user.is_active = True
+                    message['ans'] = 'successfully'
+                    message['type'] = 'success'
+                    print("all is ok")
+
     else:
         raise Exception('I dont know django! :`(')
         # form = RegisterForm()
