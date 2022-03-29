@@ -162,31 +162,84 @@
     })
 </script>
 
-  {% if chat %}
-  <div class="alert alert-{{ type }}" role="alert">
-    <h4 class="alert-heading">{{ ans }}</h4>
-  </div>
+<!--  {% if chat %}-->
+<!--  <div class="alert alert-{{ type }}" role="alert">-->
+<!--    <h4 class="alert-heading">{{ ans }}</h4>-->
+<!--  </div>-->
+<!--{% endif %}-->
+
+
+
+
+<!--  {% if ans %}-->
+<!--  <div class="alert alert-{{ type }}" role="alert">-->
+<!--    <h4 class="alert-heading">{{ ans }}</h4>-->
+<!--  </div>-->
+<!--{% endif %}-->
+
+{% if chat %}
+
+  {% for msg in chat.all %}
+
+  <h10>{{ msg.id }} {{ msg.author }}:</h10>
+  <br>
+  <h5>    {{ msg.text }}</h5>
+  <br>
+  <br>
+  <br>
+
+  {% endfor %}
+
+<form method="post" action="">
+{% csrf_token %}
+
+{{ form.text.label_tag }}
+
+  {{ form.text }}
+
+
+<input type="submit" name="next" value="send" />
+
+<!--<input type="hidden" name="next" value="{{ next }}" />-->
+
+
+</form>
+{% else %}
+  <form method="GET" action="create">
+{% csrf_token %}
+
+ <p>create dialog with user <input type="text" name="u_name"></p>
+<input type="submit" name="next" value="create" />
+<br><br>
+<!--<input type="hidden" name="next" value="{{ next }}" />-->
+
+
+</form>
+
 {% endif %}
 
+{% if not chats and not chat %}
+    <div class="panel panel-body">
+      <p>Невозможно начать беседу. Не найден пользователь или вы не имеете доступа к данной беседе.</p>
+    </div>
+{% else %}
 
+    {% for gg in chats %}
 
+      id =  {{ gg.id }}
+  <br>
+      name = {{ gg.members.all.0 }} {{ gg.members.all.1 }}
+  <br>
+  <a href="/chat/{{ gg.id }}">к чату</a>
+  <br>
+  <br>
 
-  {% if ans %}
-  <div class="alert alert-{{ type }}" role="alert">
-    <h4 class="alert-heading">{{ ans }}</h4>
-  </div>
-{% endif %}
-
-
-{% if abouts %}
-
-    {% for about in abouts %}
-        <h{{ about.size }}>{{ about.string }}</h{{ about.size }}>
-        <br>
     {% endfor %}
 
 {% endif %}
 
 
+  
+  
   </body>
 </html>
