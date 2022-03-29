@@ -19,23 +19,36 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+          <li><a href="/" class="nav-link px-2 text-{{ page.home }}">Home</a></li>
+          <li><a href="/games" class="nav-link px-2 text-{{ page.games }}">Games</a></li>
+          <li><a href="/chat" class="nav-link px-2 text-{{ page.chat }}">Chat</a></li>
+          <li><a href="#" class="nav-link px-2 text-{{ page.hz }}">FAQs</a></li>
+          <li><a href="/about" class="nav-link px-2 text-{{ page.about }}">About</a></li>
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
           <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
         </form>
 
+        {% if user.is_authenticated %}
+
+        <form class="" method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          {{ user.username }}
+          <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login" name="next" value="logout">logout</button>
+        </form>
+
+        {% else %}
         <div class="text-end">
           <!-- Button trigger modal -->
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">
             Login
           </button>
-
+<!--          {% if message.ans %}-->
+<!--          <div class="alert alert-danger" role="alert">-->
+<!--            <h4 class="alert-heading">govno {{ message.ans }}</h4>-->
+<!--          </div>-->
+<!--          {% endif %}-->
           <!-- Modal -->
           <div class="modal modal-signin text-black" tabindex="-1" id="login">
             <div class="modal-dialog" role="document">
@@ -47,16 +60,18 @@
                 </div>
 
                 <div class="modal-body p-5 pt-0">
-                  <form class="">
+                  <form class="" method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+
                     <div class="form-floating mb-3">
-                      <input type="email" class="form-control rounded-4" id="FloatingInput" placeholder="name@example.com">
-                      <label for="FloatingInput">Email address</label>
+                      <input type="username" class="form-control rounded-4" name="username" id="FloatingInput" placeholder="name@example.com">
+                      <label for="FloatingInput">username</label>
                     </div>
                     <div class="form-floating mb-3">
-                      <input type="password" class="form-control rounded-4" id="FloatingPassword" placeholder="Password">
+                      <input type="password" name="password" class="form-control rounded-4" id="FloatingPassword" placeholder="Password">
                       <label for="FloatingPassword">Password</label>
                     </div>
-                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign up</button>
+                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" name="next" value="login" type="submit">Sign up</button>
                     <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
                     <hr class="my-4">
                     <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
@@ -90,22 +105,27 @@
                   <h2 class="fw-bold mb-0">Sign up for free</h2>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
                 <div class="modal-body p-5 pt-0">
-                  <form class="">
+                  <form class="" method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
                     <div class="form-floating mb-3">
-                      <input type="email" class="form-control rounded-4" id="regFloatingInput" placeholder="name@example.com">
+                      <input type="email" name="email" class="form-control rounded-4" id="regFloatingInput" placeholder="name@example.com">
                       <label for="regFloatingInput">Email address</label>
                     </div>
                     <div class="form-floating mb-3">
-                      <input type="password" class="form-control rounded-4" id="regFloatingPassword" placeholder="Password">
+                    <div class="form-floating mb-3">
+                      <input type="username" name="username" class="form-control rounded-4" id="username" placeholder="username">
+                      <label for="regFloatingInput">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="password" name="password1" class="form-control rounded-4" id="regFloatingPassword" placeholder="Password">
                       <label for="regFloatingPassword">Password</label>
                     </div>
                     <div class="form-floating mb-3">
-                      <input type="password" class="form-control rounded-4" id="regFloatingPassword1" placeholder="Password">
+                      <input type="password" name="password2" class="form-control rounded-4" id="regFloatingPassword1" placeholder="Password">
                       <label for="regFloatingPassword1">Repeat password</label>
                     </div>
-                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign up</button>
+                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit" name="next" value="registr">Sign up</button>
                     <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
                     <hr class="my-4">
                     <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
@@ -127,6 +147,7 @@
             </div>
           </div>
         </div>
+    {% endif %}
     </div>
     </div>
   </header>
@@ -146,11 +167,25 @@
     })
 </script>
 
-  {% if user.is_authenticated %}
-    <p>you are logged in under this name: {{ user.username }}.</p>
-    <p>you can <a href="logout">logout</a>.</p>
-  {% else %}
-    <p>you're not logged in. <br>if you want to get access to all the resources, please <a href="login">log in</a> or you can play free <a href="games">games</a></p>
-  {% endif %}
+
+
+
+  {% if ans %}
+  <div class="alert alert-{{ type }}" role="alert">
+    <h4 class="alert-heading">{{ ans }}</h4>
+  </div>
+{% endif %}
+
+
+{% if abouts %}
+
+    {% for about in abouts %}
+        <h{{ about.size }}>{{ about.string }}</h{{ about.size }}>
+        <br>
+    {% endfor %}
+
+{% endif %}
+
+
   </body>
 </html>

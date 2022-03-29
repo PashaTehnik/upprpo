@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views import generic
@@ -6,59 +6,82 @@ from django.contrib import auth
 # Create your views here.
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm
+from .models import About
+from django.contrib.auth.models import User
 
 
 def user_login(request):
+    # print(request.GET)
+    # print(request.POST)
+    message = {'ans': '', 'type': 'danger'}
+    message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+
     if request.method == 'POST':
+        print(request.POST)
         if request.POST['next'] == 'login':
             print(request.POST)
-            form = RegisterForm(request.POST)
+            form = LoginForm(request.POST)
             if form.is_valid():
                 cd = form.cleaned_data
                 user = authenticate(username=cd['username'], password=cd['password'])
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        return redirect('/')
+                        message['ans'] = 'successfully logged in'
+                        message['type'] = 'success'
+                        # return redirect('/')
                     else:
-                        return HttpResponse('Disabled account')
+                        message['ans'] = 'Disabled account'
                 else:
-                    return HttpResponse('Invalid login')
+                    message['ans'] = 'Invalid login or password'
 
-        elif request.POST['next'] == 'registr':
-            # form = RegisterForm(request.POST)
-            # if form.is_valid():
-            #     new_user = form.save(commit=False)
-            #     new_user.set_password(form.cleaned_data['password'])
-            #     new_user.save()
+        elif request.POST['next'] == 'logout':
+            logout_(request)
             return redirect('/')
-    else:
-        form = RegisterForm()
-    return render(request, 'main/login.html', {'form': form})
+        elif request.POST['next'] == 'registr':
+            print(request.POST)
+            print("registr")
+            username, email, passwd1, passwd2 = request.POST.get('username'), request.POST.get('email'), \
+                                                request.POST.get('password1'), request.POST.get('password2')
+            if passwd1 != passwd2:
+                message['ans'] = 'bad passwords'
+                message['type'] = 'danger'
+                print("bad passwd")
+            elif User.objects.get(username=username):
+                message['ans'] = 'user already exist'
+                message['type'] = 'danger'
+                print("bad passwd")
 
-
-def user_registr(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(username=cd['username'], password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return redirect('/')
-                else:
-                    return HttpResponse('Disabled account')
             else:
-                return HttpResponse('Invalid login')
+                user = User(username=username, email=email)
+                if user is not None:
+                    user.set_password(passwd1)
+                    user.save()
+                    user.is_active = True
+                    message['ans'] = 'successfully'
+                    message['type'] = 'success'
+                    print("all is ok")
+
     else:
-        form = LoginForm()
-    return render(request, 'main/login.html', {'form': form})
+        raise Exception('I dont know django! :`(')
+        # form = RegisterForm()
+    print(request, message)
+    return render(request, 'main/index.html', message)
 
 
 def index(request):
+    message = {'ans': '', 'type': 'danger'}
+    message['page'] = {'home': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
     print(request.GET)
-    return render(request, 'main/index.html')
+    print(request.POST)
+    return render(request, 'main/index.html', message)
+
+
+def about(request):
+    message = {'ans': '', 'type': 'danger'}
+    message['page'] = {'home': 'white', 'about': 'secondary', 'games': 'white', 'hz': 'white'}
+    message['abouts'] = get_list_or_404(About)
+    return render(request, 'main/index.html', message)
 
 
 def logout_(request):
