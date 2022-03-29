@@ -47,10 +47,10 @@ def user_login(request):
                 message['ans'] = 'bad passwords'
                 message['type'] = 'danger'
                 print("bad passwd")
-            elif User.objects.get(username=username):
+            elif User.objects.filter(username=username):
                 message['ans'] = 'user already exist'
                 message['type'] = 'danger'
-                print("bad passwd")
+                print("suck dick")
 
             else:
                 user = User(username=username, email=email)
