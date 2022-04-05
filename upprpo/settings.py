@@ -40,9 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'main.apps.MainConfig',
-    'chat.apps.ChatConfig',
-
     'games.apps.GamesConfig',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [
