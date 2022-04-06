@@ -31,5 +31,3 @@ class GameHtml5(models.Model):
             resized_image.save(str(settings.BASE_DIR) + pth)
             print("file", pth, "created")
         return pth
-
-

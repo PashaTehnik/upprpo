@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'games.apps.GamesConfig',
     'chat.apps.ChatConfig',
+    'support.apps.SupportConfig'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,13 @@ MEDIA_URL = '/media/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DEFAULT_FROM_EMAIL = 'upprposup@gmail.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'upprposup@gmail.com'
+EMAIL_HOST_PASSWORD = 'fuckdapolice'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

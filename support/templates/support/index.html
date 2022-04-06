@@ -1,0 +1,33 @@
+{% extends 'main/index.html' %}
+{% block content %}
+    {% if messageSent == False %}
+    <div class="container" >
+        <form method="post">
+        {% csrf_token %}
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">game</label>
+                  <select class="form-select" id="inputGroupSelect01" name="game">
+                    <option selected>Choose...</option>
+                      {% if games %}
+                        {% for game in games %}
+                            <option value="{{ game.id }}">{{ game.id }}</option>
+                        {% endfor %}
+                      {% endif %}
+                  </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="descriptionTextArea">Problem</label>
+                <textarea class="form-control" id="descriptionTextArea" name="problem"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Describe your problem</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>
+            </div>
+            <button class="w-100 mb-2 btn btn-lg rounded-4 btn-danger" name="" type="submit">Submit</button>
+        </form>
+
+
+    </div>
+    {% endif %}
+    {{ messageSent }}
+{% endblock %}
