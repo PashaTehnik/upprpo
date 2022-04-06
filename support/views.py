@@ -22,8 +22,7 @@ def index(request):
             description = cd['description']
             print(game, description, problem)
             theme = game + ':' + problem
-
-            send_mail(theme, description, settings.DEFAULT_FROM_EMAIL, settings.DEFAULT_TO_EMAIL)
+            #send_mail(theme, description, settings.DEFAULT_FROM_EMAIL, settings.DEFAULT_TO_EMAIL)
             mail_admins(theme, description)
             message = {'ans': "Thank you for contacting us, your issue will be handled. (no)", 'type': 'success'}
 

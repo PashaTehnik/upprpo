@@ -163,10 +163,25 @@
 
 {% block content %}
 
+{% if conf_code %}
 
-    {% if request.session.messageSent == True %}
-        ticket sent
-    {% endif %}
+     <div class="container" >
+       <form method="post">
+        {% csrf_token %}
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Enter code from email</label>
+              <textarea class="form-control" required="True" id="exampleFormControlTextarea1" rows="3" name="code"></textarea>
+            </div>
+            <input hidden="True" name="conf_code" value={{conf_code}}>
+            <input hidden="True" name="user" value={{user}}>
+            <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login" name="next" value="conf">Submit</button>
+        </form>
+
+
+    </div>
+
+{% endif %}
+
 {% if abouts %}
 
     {% for about in abouts %}

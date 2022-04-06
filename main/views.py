@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -8,6 +9,9 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm
 from .models import About
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from random import choice
+from string import digits
 
 
 def user_login(request):
@@ -47,7 +51,7 @@ def user_login(request):
                 message['ans'] = 'bad passwords'
                 message['type'] = 'danger'
                 print("bad passwd")
-            elif User.objects.filter(username=username):
+            elif User.objects.filter(username=username) and User.objects.filter(username=username)[0].is_active:
                 message['ans'] = 'user already exist'
                 message['type'] = 'danger'
                 print("user already exist")
@@ -55,12 +59,38 @@ def user_login(request):
             else:
                 user = User(username=username, email=email)
                 if user is not None:
+                    if User.objects.filter(username=username):
+                        tmp = User.objects.filter(username=username)[0]
+                        tmp.delete()
                     user.set_password(passwd1)
+                    user.is_active = False
                     user.save()
-                    user.is_active = True
-                    message['ans'] = 'successfully'
+                    message['ans'] = 'please check your email box'
                     message['type'] = 'success'
-                    print("all is ok")
+                    theme = 'email confirmation'
+                    code = ''.join(choice(digits) for _ in range(6))
+                    message['conf_code'] = hash(code)
+                    message['user'] = user.username
+                    mess = 'please enter this code ' + code + ' to confirm this email.'
+                    send_mail(theme, mess, settings.DEFAULT_FROM_EMAIL, [user.email])
+                    print(mess, '\nto', [user.email], '\n', "all is ok")
+        elif request.POST['next'] == 'conf':
+            #print(type(request.POST['code']))
+            # print(request.POST['code'])
+            # print(hash(request.POST['code']))
+            # print(int(request.POST['conf_code']))
+            if hash(request.POST['code']) == int(request.POST['conf_code']):
+                print("zbs")
+                user = User.objects.filter(username=request.POST['user'])[0]
+                user.is_active = True
+                user.save()
+                message['ans'] = 'success'
+                message['type'] = 'success'
+            else:
+                message['ans'] = 'incorrect code, try again'
+                message['type'] = 'danger'
+                message['conf_code'] = request.POST['conf_code']
+                message['user'] = request.POST['user']
 
     else:
         raise Exception('I dont know django! :`(')
