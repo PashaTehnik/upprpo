@@ -19,11 +19,11 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 text-white">Home</a></li>
-          <li><a href="/games" class="nav-link px-2 text-white">Games</a></li>
-          <li><a href="/chat" class="nav-link px-2 text-white">Chat</a></li>
-          <li><a href="/support" class="nav-link px-2 text-white">Support</a></li>
-          <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
+          <li><a href="/" class="nav-link px-2 text-{{ page.home }}">Home</a></li>
+          <li><a href="/games" class="nav-link px-2 text-{{ page.games }}">Games</a></li>
+          <li><a href="/chat" class="nav-link px-2 text-{{ page.chat }}">Chat</a></li>
+          <li><a href="/support" class="nav-link px-2 text-{{ page.support }}">Support</a></li>
+          <li><a href="/about" class="nav-link px-2 text-{{ page.about }}">About</a></li>
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
@@ -153,16 +153,16 @@
     </div>
   </header>
 
-
-
-
-
-{% block content %}
-  {% if ans %}
+ {% if ans %}
   <div class="alert alert-{{ type }}" role="alert">
     <h4 class="alert-heading">{{ ans }}</h4>
   </div>
 {% endif %}
+
+
+
+{% block content %}
+
 
     {% if request.session.messageSent == True %}
         ticket sent

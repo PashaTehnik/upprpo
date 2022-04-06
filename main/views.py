@@ -14,7 +14,7 @@ def user_login(request):
     # print(request.GET)
     # print(request.POST)
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'secondary', 'chat': 'white', 'about': 'white', 'games': 'white', 'hz': 'white'}
+    message['page'] = {'home': 'secondary', 'support': 'white', 'chat': 'white', 'about': 'white', 'games': 'white', 'hz': 'white'}
 
     if request.method == 'POST':
         print(request.POST)
@@ -71,7 +71,7 @@ def user_login(request):
 
 def index(request):
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'secondary', 'chat': 'white', 'about': 'white', 'games': 'white', 'hz': 'white'}
+    message['page'] = {'home': 'secondary', 'support': 'white', 'chat': 'white', 'about': 'white', 'games': 'white', 'hz': 'white'}
     print(request.GET)
     print(request.POST)
     return render(request, 'main/index.html', message)
@@ -79,7 +79,7 @@ def index(request):
 
 def about(request):
     message = {'ans': '', 'type': 'danger'}
-    message['page'] = {'home': 'white', 'chat': 'white', 'about': 'secondary', 'games': 'white', 'hz': 'white'}
+    message['page'] = {'home': 'white', 'support': 'white', 'chat': 'white', 'about': 'secondary', 'games': 'white', 'hz': 'white'}
     message['abouts'] = get_list_or_404(About)
     return render(request, 'main/index.html', message)
 

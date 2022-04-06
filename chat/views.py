@@ -17,7 +17,7 @@ def user_auth_check(request):
     if not request.user.is_authenticated:
         message = {}
         message['ans'], message['type'] = "please log in to access this page", 'warning'
-        message['chat'] = ''
+        message['support': 'white', 'chat'] = ''
         message['chats'] = ''
         return render(request, 'chat/index.html', message)
     return None
@@ -42,7 +42,7 @@ class DialogsView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DialogsView, self).get_context_data(**kwargs)
         message = {'ans': '', 'type': 'danger', 'chats':self.list_mem}
-        message['page'] = {'home': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+        message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
         if self.request.user.is_authenticated:
             res = {**message, **context}
         else:
@@ -69,8 +69,8 @@ class MessagesView(generic.ListView):
 
     def get_context_data_(self, *, object_list=None, **kwargs):
         #context = super(MessagesView, self).get_context_data(**kwargs)
-        message = {'ans': '', 'type': 'danger', 'chat': self.messages}
-        message['page'] = {'home': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+        message = {'ans': '', 'type': 'danger', 'support': 'white', 'chat': self.messages}
+        message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
         message['form'] = MessageForm()
         # if self.request.user.is_authenticated:
         #     res = {**message, **context}
@@ -106,7 +106,7 @@ def createDialog(request):
     finally:
         if not second_user:
             message = {'ans': 'This user doesn`t exist', 'type': 'danger', 'chats': Chat.objects.filter(members=request.user)}
-            message['page'] = {'home': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+            message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
             return render(request, 'chat/index.html', message)
         model = Chat()
         model.save()

@@ -10,29 +10,22 @@ from django.shortcuts import redirect, reverse
 def index(request):
 
     message = {'games': GameHtml5.objects.order_by('-id'), 'messageSent': False}
+    message['page'] = {'home': 'white', 'support': 'secondary', 'chat': 'white', 'about': 'white', 'games': 'white',
+                       'hz': 'white'}
     if request.method == 'POST':
-        print(request.POST)
         form = SupportForm(request.POST)
-        print(form)
-        # check if data from the form is clean
-        print(form.is_valid())
         if form.is_valid():
 
             cd = form.cleaned_data
-            #subject = "Sending an email with Django"
             game = cd['game']
             problem = cd['problem']
             description = cd['description']
-            print(type(game), description, problem)
+            print(game, description, problem)
             theme = game + ':' + problem
 
-            # send the email to the recipent
-            send_mail(theme, description, settings.DEFAULT_FROM_EMAIL, ['v.babushkin@g.nsu.ru'],)
-
-            # set the variable initially created to True
-            message['messageSent'] = True
-
-
+            send_mail(theme, description, settings.DEFAULT_FROM_EMAIL, settings.DEFAULT_TO_EMAIL)
+            mail_admins(theme, description)
+            message = {'ans': "Thank you for contacting us, your issue will be handled. (no)", 'type': 'success'}
 
     else:
         form = SupportForm()

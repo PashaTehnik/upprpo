@@ -141,6 +141,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 DEFAULT_FROM_EMAIL = 'upprposup@gmail.com'
+DEFAULT_TO_EMAIL = ['v.babushkin@g.nsu.ru', 'p.polovinko@g.nsu.ru']
+
+ADMINS = [('pasha_tehnik', 'polovinko.p0112@gmail.com'), ('ghostminer', 'ghostminerx@gmail.com')]
+SERVER_EMAIL = 'upprposup@gmail.com'
+SERVER_EMAIL_HOST = 'smtp.gmail.com'
+SERVER_EMAIL_PASSWORD = 'fuckdapolice'
+SERVER_EMAIL_PORT = 587
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
