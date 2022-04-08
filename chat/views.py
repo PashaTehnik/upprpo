@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
-
+from django.db.models.functions import Lower
+from django.http import JsonResponse
 
 from upprpo import settings
 from .models import Chat, Message
@@ -41,8 +42,9 @@ class DialogsView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(DialogsView, self).get_context_data(**kwargs)
-        message = {'ans': '', 'type': 'danger', 'chats':self.list_mem}
-        message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+        message = {'ans': '', 'type': 'danger', 'chats': self.list_mem}
+        message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white',
+                           'hz': 'white'}
         if self.request.user.is_authenticated:
             res = {**message, **context}
         else:
@@ -54,7 +56,7 @@ class DialogsView(generic.ListView):
 class MessagesView(generic.ListView):
 
     def post(self, request, chat_id):
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaatpravilos`")
         form = MessageForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -68,9 +70,10 @@ class MessagesView(generic.ListView):
         return redirect(reverse('chat:chat', kwargs={'chat_id': chat_id}))
 
     def get_context_data_(self, *, object_list=None, **kwargs):
-        #context = super(MessagesView, self).get_context_data(**kwargs)
+        # context = super(MessagesView, self).get_context_data(**kwargs)
         message = {'ans': '', 'type': 'danger', 'support': 'white', 'chat': self.messages}
-        message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+        message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white',
+                           'hz': 'white'}
         message['form'] = MessageForm()
         # if self.request.user.is_authenticated:
         #     res = {**message, **context}
@@ -105,8 +108,10 @@ def createDialog(request):
         second_user = User.objects.get(username=u_name)
     finally:
         if not second_user:
-            message = {'ans': 'This user doesn`t exist', 'type': 'danger', 'chats': Chat.objects.filter(members=request.user)}
-            message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white', 'hz': 'white'}
+            message = {'ans': 'This user doesn`t exist', 'type': 'danger',
+                       'chats': Chat.objects.filter(members=request.user)}
+            message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white',
+                               'games': 'white', 'hz': 'white'}
             return render(request, 'chat/index.html', message)
         model = Chat()
         model.save()
@@ -114,4 +119,20 @@ def createDialog(request):
         model.members.add(request.user)
         model.type = 'dialog'
         return redirect('/chat')
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
+def search(request):
+    if is_ajax(request):
+        q = request.GET.get('term', '')
+        results = []
+        if len(q):
+            results = list(User.objects.filter(username__istartswith=q).values_list(Lower('username'), flat=True))
+        return JsonResponse(results, safe=False)
+    else:
+        return createDialog(request)
+
 

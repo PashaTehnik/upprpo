@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('', views.DialogsView.as_view(), name='chats'),
     path('create/', views.createDialog, name='create'),
+    path('search/', views.search, name='search'),
     path('<str:chat_id>/', views.MessagesView.as_view(), name='chat'),
 
 ]
