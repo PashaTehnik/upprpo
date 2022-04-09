@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views import generic, View
 from django.template import loader
 from django.http import Http404
-from .forms import MessageForm
+from .forms import MessageForm, MultyForm
 from django.contrib.auth.models import User
 
 
@@ -74,7 +74,7 @@ class MessagesView(generic.ListView):
         message = {'ans': '', 'type': 'danger', 'support': 'white', 'chat': self.messages}
         message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white',
                            'hz': 'white'}
-        message['form'] = MessageForm()
+        message['form'] = MultyForm()
         # if self.request.user.is_authenticated:
         #     res = {**message, **context}
         # else:

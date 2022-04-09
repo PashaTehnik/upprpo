@@ -3,6 +3,10 @@
 {% block content %}
 
     <style>
+.right{
+     float: right;
+}
+
 .prokrutka {
 height: 800px; /* высота нашего блока */
 /*width: 200px;  ширина нашего блока */
@@ -13,6 +17,60 @@ overflow-y: auto; /* прокрутка по вертикали */
 
     /* нужно сделать промотку вниз чата при открытии страницы */
 }
+/* Chat containers */
+.msg_drop {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    position: relative;
+    float: left;
+    max-width: 90%;
+
+}
+
+/* Darker chat container */
+.drk {
+    border-color: #ccc;
+    background-color: #ddd;
+    float: right;
+}
+
+/* Clear floats */
+.msg_drop::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Style images */
+.msg_drop p1 {
+    float: left;
+    color: #006b1b;
+}
+
+/* Style the right image */
+.msg_drop p1.right {
+    float: right;
+}
+
+/* Style time text */
+.time-right {
+    float: right;
+    color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+    float: left;
+    color: #999;
+}
+
+.inp-form {
+    position: absolute;
+    bottom:0;
+}
 </style>
 
 {% if chat %}
@@ -22,27 +80,78 @@ overflow-y: auto; /* прокрутка по вертикали */
 
         {% for msg in chat.all %}
 
-            <h10>{{ msg.pub_date }} {{ msg.author }}:</h10>
-            <br>
-            <h5>    {{ msg.text }}</h5>
-            <br>
-            <br>
-            <br>
+{#            <h10>{{ msg.pub_date }} {{ msg.author }}:</h10>#}
+{#            <br>#}
+{#            <h5>    {{ msg.text }}</h5>#}
+{#            <br>#}
+{#            <br>#}
+{#            <br>#}
+            {% if msg.author == user %}
+
+<div class="msg_drop drk">
+    {#  <img src="/media/images/no-image.jpg" alt="Avatar" class="right">#}
+    <p1 class="left">{{ msg.author }}</p1>
+
+  <br>
+  <p> {{ msg.text }}</p>
+  <span class="time-right">{{ msg.pub_date }}</span>
+</div>
+
+                 {% else %}
+<div class="msg_drop">
+{#  <img src="/w3images/bandmember.jpg" alt="Avatar">#}
+    <p1 class="left">{{ msg.author }}</p1>
+
+  <br>
+  <p>{{ msg.text }}</p>
+  <span class="time-right">{{ msg.pub_date }}</span>
+</div>
+    {% endif %}
+<br><br><br><br><br><br>
 
         {% endfor %}
 
 </div>
-
+<center class="inp-form">
 {{ form.text.label_tag }}
 
-  {{ form.text }}
+  <input type="text" name="text" autocomplete="off" size=140>
 
 
-<input type="submit" name="next" value="send" />
+<input  type="submit" name="next" value="send" />
 
+
+
+
+</center>
 <!--<input type="hidden" name="next" value="{{ next }}" />-->
 
 
+////////////////////////////////////
+
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">
+            прикрепить
+          </button>
+
+          <!-- Modal -->
+          <div class="modal modal-signin text-black" tabindex="-1" id="login">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content rounded-5 shadow">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                  <h2 class="fw-bold mb-0">Прикрепите файл</h2>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+{#                  <input type="file" name="image" accept="image/*" required="" id="id_image">#}
+                  {{ form.image.label_tag }} {{ form.image }}
+                  {{ form.mult.label_tag }} {{ form.mult }}
+                  {{ form.file.label_tag }} {{ form.file }}
+              </div>
+            </div>
+          </div>
+
+
+///////////////////////////////////
 </form>
 {% else %}
 
@@ -94,7 +203,7 @@ overflow-y: auto; /* прокрутка по вертикали */
 
 {% endif %}
     <script>
-          <!-- Начало кода для для работы csrf с ajax -->
+          {#<!-- Начало кода для для работы csrf с ajax -->#}
           function getCookie(name) {
               var cookieValue = null;
               if(document.cookie && document.cookie != '') {
