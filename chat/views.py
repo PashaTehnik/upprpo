@@ -92,7 +92,7 @@ class MessagesView(generic.ListView):
 
     def get(self, request, chat_id):
         self.chat = Chat.objects.get(id=chat_id)
-        self.messages = self.chat.message_set
+        self.messages = self.chat.message_set.order_by('-id')
         # print(self.messages.all()[0].text)
         context = self.get_context_data_()
         check = user_auth_check(request)

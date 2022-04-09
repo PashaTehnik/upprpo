@@ -8,14 +8,15 @@
 }
 
 .prokrutka {
-height: 800px; /* высота нашего блока */
+
+height: 500px; /* высота нашего блока */
 /*width: 200px;  ширина нашего блока */
 background: #ecedee; /* цвет фона, белый */
 border: 1px solid #C1C1C1; /* размер и цвет границы блока */
 overflow-x: hidden; /* прокрутка по горизонтали */
 overflow-y: auto; /* прокрутка по вертикали */
-
-    /* нужно сделать промотку вниз чата при открытии страницы */
+display: flex;
+flex-direction: column-reverse;
 }
 /* Chat containers */
 .msg_drop {
@@ -71,10 +72,15 @@ overflow-y: auto; /* прокрутка по вертикали */
     position: absolute;
     bottom:0;
 }
+#drop_zone {
+  border: 5px solid blue;
+  width:  200px;
+  height: 100px;
+}
 </style>
 
 {% if chat %}
-<form method="post" action="">
+<form method="post">
     {% csrf_token %}
     <div class="prokrutka">
 
@@ -107,7 +113,7 @@ overflow-y: auto; /* прокрутка по вертикали */
   <span class="time-right">{{ msg.pub_date }}</span>
 </div>
     {% endif %}
-<br><br><br><br><br><br>
+{#<br><br><br><br><br><br>#}
 
         {% endfor %}
 
@@ -123,35 +129,39 @@ overflow-y: auto; /* прокрутка по вертикали */
 
 
 
-</center>
+
 <!--<input type="hidden" name="next" value="{{ next }}" />-->
 
 
-////////////////////////////////////
-
-          <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">
-            прикрепить
-          </button>
-
-          <!-- Modal -->
-          <div class="modal modal-signin text-black" tabindex="-1" id="login">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content rounded-5 shadow">
-                <div class="modal-header p-5 pb-4 border-bottom-0">
-                  <h2 class="fw-bold mb-0">Прикрепите файл</h2>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+{#////////////////////////////////////#}
+{##}
+{#          <!-- Button trigger modal -->#}
+{#          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">#}
+{#            прикрепить#}
+{#          </button>#}
+{##}
+{#          <!-- Modal -->#}
+{#          <div class="modal modal-signin text-black" tabindex="-1" id="login">#}
+{#            <div class="modal-dialog" role="document">#}
+{#              <div class="modal-content rounded-5 shadow">#}
+{#                <div class="modal-header p-5 pb-4 border-bottom-0">#}
+{#                  <h2 class="fw-bold mb-0">Прикрепите файл</h2>#}
+{#                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
+{#                </div>#}
 {#                  <input type="file" name="image" accept="image/*" required="" id="id_image">#}
-                  {{ form.image.label_tag }} {{ form.image }}
-                  {{ form.mult.label_tag }} {{ form.mult }}
-                  {{ form.file.label_tag }} {{ form.file }}
-              </div>
-            </div>
-          </div>
+{#                  {{ form.image.label_tag }} {{ form.image }}#}
+{#                  {{ form.mult.label_tag }} {{ form.mult }}#}
+{#                  {{ form.file.label_tag }} {{ form.file }}#}
+{#                 <div id="drop_zone" ondrop="dropHandler(event);">#}
+{#  <p>Drag one or more files to this Drop Zone ...</p>#}
+{#</div>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
 
 
-///////////////////////////////////
+{#///////////////////////////////////#}
+</center>
 </form>
 {% else %}
 
@@ -203,6 +213,34 @@ overflow-y: auto; /* прокрутка по вертикали */
 
 {% endif %}
     <script>
+    function dragOverHandler(ev) {
+  console.log('File(s) in drop zone');
+
+  // Prevent default behavior (Prevent file from being opened)
+  ev.preventDefault();
+}
+    function dropHandler(ev) {
+  console.log('File(s) dropped');
+
+  // Prevent default behavior (Prevent file from being opened)
+  ev.preventDefault();
+
+  if (ev.dataTransfer.items) {
+    // Use DataTransferItemList interface to access the file(s)
+    for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+      // If dropped items aren't files, reject them
+      if (ev.dataTransfer.items[i].kind === 'file') {
+        var file = ev.dataTransfer.items[i].getAsFile();
+        console.log('... file[' + i + '].name = ' + file.name);
+      }
+    }
+  } else {
+    // Use DataTransfer interface to access the file(s)
+    for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+      console.log('... file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+    }
+  }
+}
           {#<!-- Начало кода для для работы csrf с ajax -->#}
           function getCookie(name) {
               var cookieValue = null;
