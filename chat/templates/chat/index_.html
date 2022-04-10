@@ -1,0 +1,91 @@
+{% extends 'main/index.html' %}
+
+{% block content %}
+
+    <style>
+.prokrutka {
+height: 800px; /* высота нашего блока */
+/*width: 200px;  ширина нашего блока */
+background: #ecedee; /* цвет фона, белый */
+border: 1px solid #C1C1C1; /* размер и цвет границы блока */
+overflow-x: hidden; /* прокрутка по горизонтали */
+overflow-y: auto; /* прокрутка по вертикали */
+
+    /* нужно сделать промотку вниз чата при открытии страницы */
+}
+</style>
+
+{% if chat %}
+<form method="post" action="">
+    {% csrf_token %}
+    <div class="prokrutka">
+
+        {% for msg in chat.all %}
+
+            <h10>{{ msg.pub_date }} {{ msg.author }}:</h10>
+            <br>
+            <h5>    {{ msg.text }}</h5>
+            <br>
+            <br>
+            <br>
+
+        {% endfor %}
+
+</div>
+
+{{ form.text.label_tag }}
+
+  {{ form.text }}
+
+
+<input type="submit" name="next" value="send" />
+
+<!--<input type="hidden" name="next" value="{{ next }}" />-->
+
+
+</form>
+{% else %}
+  <form method="GET" action="/chat/create">
+{% csrf_token %}
+
+{% if user.is_authenticated %}
+
+ <p>create dialog with user <input type="text" name="u_name"></p>
+<input type="submit" name="next" value="create" />
+<br><br>
+
+{% endif %}
+
+</form>
+
+{% endif %}
+
+
+{% if not chats and not chat %}
+    {% if user.is_authenticated %}
+        <div class="panel panel-body">
+          <p>Nothing to show.</p>
+        </div>
+    {% endif %}
+{% else %}
+
+    {% for gg in chats %}
+
+      id =  {{ gg.id }}
+  <br>
+      name =
+        {% if gg.members.all.1.username == user.username %}
+            {{ gg.members.all.0 }}
+        {% else %}
+            {{ gg.members.all.1 }}
+        {% endif %}
+  <br>
+  <a href="/chat/{{ gg.id }}">к чату</a>
+  <br>
+  <br>
+
+    {% endfor %}
+
+{% endif %}
+{% endblock %}
+
