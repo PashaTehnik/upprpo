@@ -10,8 +10,17 @@ from django.urls import reverse
 from django.views import generic, View
 from django.template import loader
 from django.http import Http404
-from .forms import MessageForm, MultyForm
+from .forms import MessageForm, MultiForm
 from django.contrib.auth.models import User
+
+from braces.views import (
+    AjaxResponseMixin,
+    JSONResponseMixin,
+    LoginRequiredMixin,
+    SuperuserRequiredMixin,
+)
+
+from .models import Photo
 
 
 def user_auth_check(request):
@@ -57,7 +66,7 @@ class MessagesView(generic.ListView):
 
     def post(self, request, chat_id):
         print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaatpravilos`")
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
             cd = form.cleaned_data
             message = Message()
@@ -65,6 +74,7 @@ class MessagesView(generic.ListView):
             chat = Chat.objects.get(id=chat_id)
             message.text = cd['text']
             message.author = request.user
+            message.image = request.FILES['image']
             message.save()
             chat.message_set.add(message)
         return redirect(reverse('chat:chat', kwargs={'chat_id': chat_id}))
@@ -74,7 +84,7 @@ class MessagesView(generic.ListView):
         message = {'ans': '', 'type': 'danger', 'support': 'white', 'chat': self.messages}
         message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white', 'games': 'white',
                            'hz': 'white'}
-        message['form'] = MultyForm()
+        message['form'] = MultiForm()
         # if self.request.user.is_authenticated:
         #     res = {**message, **context}
         # else:
@@ -109,9 +119,9 @@ def createDialog(request):
     finally:
         if not second_user:
             message = {'ans': 'This user doesn`t exist', 'type': 'danger',
-                       'chats': Chat.objects.filter(members=request.user)}
-            message['page'] = {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white',
-                               'games': 'white', 'hz': 'white'}
+                       'chats': Chat.objects.filter(members=request.user),
+                       'page': {'home': 'white', 'support': 'white', 'chat': 'secondary', 'about': 'white',
+                                'games': 'white', 'hz': 'white'}}
             return render(request, 'chat/index.html', message)
         model = Chat()
         model.save()
@@ -136,3 +146,20 @@ def search(request):
         return createDialog(request)
 
 
+class AjaxPhotoUploadView(LoginRequiredMixin,
+                          JSONResponseMixin,
+                          AjaxResponseMixin,
+                          View):
+    """
+    View for uploading photos via AJAX.
+    """
+
+    def post_ajax(self, request, *args, **kwargs):
+        uploaded_file = request.FILES['file']
+        Photo.objects.create(file=uploaded_file)
+
+        response_dict = {
+            'message': 'File uploaded successfully!',
+        }
+
+        return self.render_json_response(response_dict, status=200)

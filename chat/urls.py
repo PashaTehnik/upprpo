@@ -12,5 +12,5 @@ urlpatterns = [
     path('create/', views.createDialog, name='create'),
     path('search/', views.search, name='search'),
     path('<str:chat_id>/', views.MessagesView.as_view(), name='chat'),
-
+    path('upload/', views.AjaxPhotoUploadView.as_view, name='ajax_photo_upload_view')
 ]

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django_extensions.db.models import TimeStampedModel
+from taggit.managers import TaggableManager
 
 
 class Message(models.Model):
@@ -19,5 +21,11 @@ class Chat(models.Model):
     type = models.CharField(max_length=300, choices=CHOICES, default='dialog')
     members = models.ManyToManyField(User)
     message_set = models.ManyToManyField(Message)
+
+
+class Photo(models.Model):
+    file = models.ImageField(upload_to='media', default='media/images/no-image.jpg')
+    #is_public = models.BooleanField(default=True)
+    #tags = TaggableManager(blank=True, help_text=None)
 
 
