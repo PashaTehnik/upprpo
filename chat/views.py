@@ -13,14 +13,6 @@ from django.http import Http404
 from .forms import MessageForm, MultiForm
 from django.contrib.auth.models import User
 
-from braces.views import (
-    AjaxResponseMixin,
-    JSONResponseMixin,
-    LoginRequiredMixin,
-    SuperuserRequiredMixin,
-)
-
-from .models import Photo
 
 
 def user_auth_check(request):
@@ -146,20 +138,3 @@ def search(request):
         return createDialog(request)
 
 
-class AjaxPhotoUploadView(LoginRequiredMixin,
-                          JSONResponseMixin,
-                          AjaxResponseMixin,
-                          View):
-    """
-    View for uploading photos via AJAX.
-    """
-
-    def post_ajax(self, request, *args, **kwargs):
-        uploaded_file = request.FILES['file']
-        Photo.objects.create(file=uploaded_file)
-
-        response_dict = {
-            'message': 'File uploaded successfully!',
-        }
-
-        return self.render_json_response(response_dict, status=200)
