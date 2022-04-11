@@ -94,9 +94,8 @@ flex-direction: column-reverse;
 
   <br>
   <p> {{ msg.text }}</p>
-      {% if  msg.image%}
-          {{ msg.image }}
-          <iframe src="{{ msg.image }}" width="800" height="550" scrolling="no" allowfullscreen="true" border="0"></iframe>
+      {% if  msg.image %}
+          <img src="{{ msg.image.url }}" width="800" height="550">
           {% endif %}
   <span class="time-right">{{ msg.pub_date }}</span>
 </div>
