@@ -94,8 +94,13 @@ flex-direction: column-reverse;
 
   <br>
   <p> {{ msg.text }}</p>
-      {% if  msg.image %}
-          <img src="{{ msg.image.url }}" width="800" height="550">
+    {% if  msg.file %}
+          <a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="{{ msg.file.url }}">
+        {{ msg.file.name }}
+        </a>
+          {% endif %}
+    {% if  msg.image %}
+          <a href="{{ msg.image.url }}"> <img src="{{ msg.image.url }}" width="800" height="550"></a>
           {% endif %}
   <span class="time-right">{{ msg.pub_date }}</span>
 </div>
@@ -107,6 +112,14 @@ flex-direction: column-reverse;
 
   <br>
   <p>{{ msg.text }}</p>
+     {% if  msg.file %}
+          <a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" href="{{ msg.file.url }}">
+        {{ msg.file.name }}
+        </a>
+          {% endif %}
+    {% if  msg.image %}
+          <a href="{{ msg.image.url }}"> <img src="{{ msg.image.url }}" width="800" height="550"></a>
+          {% endif %}
   <span class="time-right">{{ msg.pub_date }}</span>
 </div>
     {% endif %}
@@ -121,7 +134,7 @@ flex-direction: column-reverse;
 {{ form.text.label_tag }}
 
   <input type="text" name="text" autocomplete="off" size=140>
-    <input type="file" name="image"/>
+    <input class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" type="file" name="file"/>
  <button type="submit">send</button>
 
 

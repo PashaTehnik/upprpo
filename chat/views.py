@@ -12,7 +12,17 @@ from django.template import loader
 from django.http import Http404
 from .forms import MessageForm, MultiForm
 from django.contrib.auth.models import User
+from os import path
+from PIL import Image
 
+
+def type_file(name):
+    _, ext = path.splitext(name)
+    print(ext)
+    for type_ in ["png", "jpg", "jpeg"]:
+        if ext == '.' + type_:
+            return "image"
+    return "file"
 
 
 def user_auth_check(request):
@@ -59,14 +69,18 @@ class MessagesView(generic.ListView):
     def post(self, request, chat_id):
         print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaatpravilos`")
         form = MessageForm(request.POST, request.FILES)
-        if form.is_valid():
+        if form.is_valid() or request.FILES:
             cd = form.cleaned_data
             message = Message()
             # message.chat_id = chat_id
             chat = Chat.objects.get(id=chat_id)
             message.text = cd['text']
             message.author = request.user
-            message.image = request.FILES['image']
+            if cd["file"]:
+                if type_file(cd["file"].name) == "image":
+                    message.image = request.FILES['file']
+                else:
+                    message.file = request.FILES['file']
             message.save()
             chat.message_set.add(message)
         return redirect(reverse('chat:chat', kwargs={'chat_id': chat_id}))

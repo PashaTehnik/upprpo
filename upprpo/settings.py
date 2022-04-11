@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'games.apps.GamesConfig',
     'chat.apps.ChatConfig',
     'support.apps.SupportConfig',
-    'user_profile.apps.UserProfileConfig',
 ]
 
 MIDDLEWARE = [
