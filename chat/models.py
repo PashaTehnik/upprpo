@@ -27,3 +27,7 @@ class MessageSerializer(serializers.Serializer):
     author = serializers.CharField(source='author.username', max_length=300)
     pub_date = serializers.DateTimeField()
 
+class ChatSerializer(serializers.Serializer):
+    messages = serializers.ModelField(MessageSerializer)
+    user1 =
+)
