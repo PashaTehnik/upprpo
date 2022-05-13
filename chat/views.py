@@ -3,9 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.db.models.functions import Lower
 from django.http import JsonResponse
-
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from upprpo import settings
-from .models import Chat, Message
+from .models import Chat, Message, MessageSerializer
 from django.urls import reverse
 from django.views import generic, View
 from django.template import loader
@@ -152,3 +153,14 @@ def search(request):
         return createDialog(request)
 
 
+class GetMassagesInfoView(APIView):
+
+    def get(self, request):
+        # Получаем набор всех записей из таблицы Capital
+        queryset = Message.objects.all()
+        # Сериализуем извлечённый набор записей
+        serializer_for_queryset =MessageSerializer(
+            instance=queryset,  # Передаём набор записей
+            many=True  # Указываем, что на вход подаётся именно набор записей
+        )
+        return Response(serializer_for_queryset.data)

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from rest_framework import serializers
 
 
 class Message(models.Model):
@@ -22,4 +22,8 @@ class Chat(models.Model):
     message_set = models.ManyToManyField(Message)
 
 
+class MessageSerializer(serializers.Serializer):
+    text = serializers.CharField(max_length=300)
+    author = serializers.CharField(source='author.username', max_length=300)
+    pub_date = serializers.DateTimeField()
 
