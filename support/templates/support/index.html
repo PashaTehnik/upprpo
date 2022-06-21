@@ -6,8 +6,8 @@
         {% csrf_token %}
             <div class="input-group mb-3">
                 <label class="input-group-text" for="inputGroupSelect01">game</label>
-                  <select class="form-select" id="inputGroupSelect01" name="game">
-                    <option selected>Choose...</option>
+                  <select class="form-select" id="inputGroupSelect01" required="True" name="game">
+                        <option selected>Choose game</option>
                       {% if games %}
                         {% for game in games %}
                             <option value="{{ game.id }}">{{ game.id }}</option>

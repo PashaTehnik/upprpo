@@ -148,6 +148,7 @@ SERVER_EMAIL = 'upprposup@gmail.com'
 SERVER_EMAIL_HOST = 'smtp.gmail.com'
 SERVER_EMAIL_PASSWORD = 'fuckdapolice'
 SERVER_EMAIL_PORT = 587
+SERVER_EMAIL_USE_TLS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

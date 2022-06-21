@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from upprpo import settings
-from .models import Chat, Message, MessageSerializer
+from .models import Chat, Message, MessageSerializer, ChatSerializer
 from django.urls import reverse
 from django.views import generic, View
 from django.template import loader
@@ -155,12 +155,32 @@ def search(request):
 
 class GetMassagesInfoView(APIView):
 
-    def get(self, request):
-        # Получаем набор всех записей из таблицы Capital
-        queryset = Message.objects.all()
-        # Сериализуем извлечённый набор записей
+    def get(self, request, chat_id):
+        queryset = None
+        if request.user.is_authenticated:
+            chat = Chat.objects.get(id=chat_id)
+            if request.user in chat.members:
+                queryset = chat.message_set.order_by('-id')
+            else:
+                queryset = None
         serializer_for_queryset =MessageSerializer(
             instance=queryset,  # Передаём набор записей
             many=True  # Указываем, что на вход подаётся именно набор записей
         )
         return Response(serializer_for_queryset.data)
+
+
+class GetChatsInfoView(APIView):
+
+    def get(self, request):
+        queryset = None
+        #if request.user.is_authenticated:
+        queryset = Chat.objects.filter(members=request.user)
+        serializer_for_queryset = ChatSerializer(
+            instance=queryset,  # Передаём набор записей
+            many=True  # Указываем, что на вход подаётся именно набор записей
+        )
+        return Response(serializer_for_queryset.data)
+
+
+
