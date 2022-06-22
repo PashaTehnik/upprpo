@@ -155,15 +155,9 @@ def search(request):
 
 class GetMessagesInfoView(APIView):
 
-    def get(self, request, chat_id):
-        queryset = None
-        if request.user.is_authenticated:
-            chat = Chat.objects.get(id=chat_id)
-            if request.user in chat.members:
-                queryset = chat.message_set.order_by('-id')
-            else:
-                queryset = None
-        serializer_for_queryset =MessageSerializer(
+    def get(self, request):
+        queryset = Message.objects.all()
+        serializer_for_queryset = MessageSerializer(
             instance=queryset,  # Передаём набор записей
             many=True  # Указываем, что на вход подаётся именно набор записей
         )
