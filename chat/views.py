@@ -153,7 +153,7 @@ def search(request):
         return createDialog(request)
 
 
-class GetMassagesInfoView(APIView):
+class GetMessagesInfoView(APIView):
 
     def get(self, request, chat_id):
         queryset = None

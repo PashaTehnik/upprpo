@@ -15,3 +15,4 @@ with open('messages.txt', 'w') as file:
             #f"pub date : {message['pub_date']}, "
             f"author : {message['members']}\n"
         )
+        print('1')
