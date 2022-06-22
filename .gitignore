@@ -1,5 +1,5 @@
 /.idea/.gitignore
-/boot
+/boot_/boot
 /root
 /games/migrations/0001_initial.py
 /main/migrations/0001_initial.py
