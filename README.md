@@ -23,3 +23,6 @@ docker-compose up
 <p> далее снова запускаем контейнер (docker-compose up)</p>
 переходим по адрессу <a href="https://localhost:8000/">https://localhost:8000/</a> и получаем запущенный сайт. <br>
 Для администрирование переходим по адрессу <a href="https://localhost:8000/admin">https://localhost:8000/admin</a> и вводим логин и пароль суперпользователя.
+
+<br>
+<p>Если нужно удалить созданный ранее контейнер - <b>docker-compose down</b>, для остановки контейнера <b>Ctrl+C</b></p>
