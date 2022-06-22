@@ -4,7 +4,7 @@
 <p>1) скачать и установить docker (инструкции для 
 <a href="https://docs.docker.com/desktop/windows/install/">windows</a>, 
 <a href="https://docs.docker.com/desktop/linux/install/">linux</a> и 
- <a href="https://docs.docker.com/desktop/mac/install/">mac</a>)<br><b>В случае windows для того, чтобы контейнер запустился, нужно чтобы было запущено только что установленная программа docker</b></p>
+ <a href="https://docs.docker.com/desktop/mac/install/">mac</a>)<br><b>В случае windows для того, чтобы контейнер запустился, нужно чтобы было запущена только что установленная программа docker</b></p>
 
 <p>2) установить git (<a href="https://github.com/git-guides/install-git#:~:text=To%20install%20Git%2C%20navigate%20to,installation%20by%20typing%3A%20git%20version%20.">инстукция</a>) и склонировать наш проект (выполнить команду в термиале "git clone --recursive https://github.com/pashatehnik/upprpo.git") или скачать zip файлом</p>
 
