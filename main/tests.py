@@ -1,6 +1,5 @@
 from django.test import TestCase
 from main.models import About
-from django.shortcuts import render, get_list_or_404
 
 
 class AboutTestCase(TestCase):
@@ -11,6 +10,4 @@ class AboutTestCase(TestCase):
     def test_object_created(self):
         about = About.objects.all().last().__dict__
 
-        #self.assertIsNotNone(about)
         self.assertEqual(about['string'], "Abouttest hmmmm")
-# Create your tests here.
