@@ -31,11 +31,4 @@ jobs:
       run: |
         python manage.py test main
         python manage.py test chat
-        
-    - name: Checkout action
-      uses: actions/checkout@v2
-    - name: Django Coverage action
-      uses: actions/python-django-coverage-gitHub-action@0.9
-      with:
-        django-app: 'sample_app'
-        minimum-coverage: '1'
+  
