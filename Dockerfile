@@ -17,5 +17,3 @@ WORKDIR /upprpo
 RUN adduser -D user
 
 USER user
-
-
